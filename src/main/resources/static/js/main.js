@@ -13,6 +13,7 @@ var messageForm = document.querySelector('#messageForm');
 var messageInput = document.querySelector('#message');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
+var conversation = document.querySelector('#conversation');
 
 var stompClient = null;
 var username = null;
@@ -121,6 +122,7 @@ function getAvatarColor(messageSender) {
 
 function connectConversation(event){
     username = document.querySelector('#name').value.trim();
+   
 
     if(username) {
         usernamePage.classList.add('hidden');
@@ -131,15 +133,16 @@ function connectConversation(event){
 
         stompClient.connect({}, onConnectedConversation, onError);
     }
-    event.preventDefault();
+    //event.preventDefault();
 }
 
 function onConnectedConversation() {
     // Subscribe to the Public Topic
-    stompClient.subscribe('/topic/public', onMessageReceived);
+     conversation = document.querySelector('#conversation').value.trim();
+    stompClient.subscribe('/topic/'+conversation, onMessageReceived);
 
     // Tell your username to the server
-    stompClient.send("/app/chat.addUser",
+    stompClient.send("/app/chat.addUser/"+conversation,
         {},
         JSON.stringify({sender: username, type: 'JOIN'})
     )

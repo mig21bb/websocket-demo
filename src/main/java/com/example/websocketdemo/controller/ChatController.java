@@ -35,7 +35,7 @@ public class ChatController {
         return chatMessage;
     }
 
-    @MessageMapping("/chat.addUser")
+    @MessageMapping("/chat.addUser/{conversationId}")
     @SendTo("/topic/{conversationId}")
     public ChatMessage addUserInConversation(@Payload ChatMessage chatMessage, 
                             @DestinationVariable String conversationId,
