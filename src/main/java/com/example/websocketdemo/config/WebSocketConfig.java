@@ -27,15 +27,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/app");
         registry.enableSimpleBroker("/topic");
     }*/
-    
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-    registry.setApplicationDestinationPrefixes("/app");
+        registry.setApplicationDestinationPrefixes("/app");
 
-    // Use this for enabling a Full featured broker like RabbitMQ
-    registry.enableStompBrokerRelay("/topic")
-            .setRelayHost("localhost")
-            .setRelayPort(61613)
-            .setClientLogin("guest")
-            .setClientPasscode("guest");
-}
+        // Use this for enabling a Full featured broker like RabbitMQ
+        registry.enableStompBrokerRelay("/topic")
+                .setRelayHost("localhost")
+                .setRelayPort(61613)
+                .setClientLogin("guest")
+                .setClientPasscode("guest");
+
+    }
 }

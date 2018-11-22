@@ -10,7 +10,9 @@ var usernamePage = document.querySelector('#username-page');
 var chatPage = document.querySelector('#chat-page');
 var usernameForm = document.querySelector('#usernameForm');
 var messageForm = document.querySelector('#messageForm');
+var messageFormConversation = document.querySelector('#messageFormConversation');
 var messageInput = document.querySelector('#message');
+var messageInputConv = document.querySelector('#messageConv');
 var messageArea = document.querySelector('#messageArea');
 var connectingElement = document.querySelector('.connecting');
 var conversation = document.querySelector('#conversation');
@@ -60,13 +62,29 @@ function onError(error) {
 
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
+     
     if(messageContent && stompClient) {
         var chatMessage = {
             sender: username,
             content: messageInput.value,
             type: 'CHAT'
         };
-        stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+        stompClient.send("/app/chat.sendMessage/", {}, JSON.stringify(chatMessage));
+        messageInput.value = '';
+    }
+    event.preventDefault();
+}
+
+function sendMessageOnConversation() {
+    var messageContent = messageInputConv.value.trim();
+     conversation = document.getElementById('conversationId').value.trim();
+    if(messageContent && stompClient) {
+        var chatMessage = {
+            sender: username,
+            content: messageInputConv.value,
+            type: 'CHAT'
+        };
+        stompClient.send("/app/chat.sendMessage/"+conversation, {}, JSON.stringify(chatMessage));
         messageInput.value = '';
     }
     event.preventDefault();
@@ -152,3 +170,4 @@ function onConnectedConversation() {
 
 usernameForm.addEventListener('submit', connect, true)
 messageForm.addEventListener('submit', sendMessage, true)
+messageFormConversation.addEventListener('submit',sendMessageOnConversation,true);
