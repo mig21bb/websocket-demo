@@ -14,6 +14,17 @@ public class ChatMessage {
     private String content;
     private String sender;
 
+    public ChatMessage(MessageType type, String content, String sender) {
+        this.type = type;
+        this.content = content;
+        this.sender = sender;
+    }   
+
+    public ChatMessage() {
+        
+    }
+    
+
     public enum MessageType {
         CHAT,
         JOIN,

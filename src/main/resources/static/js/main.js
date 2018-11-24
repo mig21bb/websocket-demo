@@ -25,8 +25,25 @@ var colors = [
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
+window.onload = function() {
+    connectUser()
+};
+
+function connectUser() {
+    
+ username = document.querySelector('#name').value.trim();
+    if(username) {
+       
+
+        var socket = new SockJS('/ws');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, onConnectedSelfConversation, onError);
+    }
+}
+
 function connect(event) {
-    username = document.querySelector('#name').value.trim();
+    //username// = document.querySelector('#name').value.trim();
 
     if(username) {
         usernamePage.classList.add('hidden');
@@ -161,6 +178,20 @@ function onConnectedConversation() {
 
     // Tell your username to the server
     stompClient.send("/app/chat.addUser/"+conversation,
+        {},
+        JSON.stringify({sender: username, type: 'JOIN'})
+    )
+
+    connectingElement.classList.add('hidden');
+}
+
+function onConnectedSelfConversation() {
+    // Subscribe to the Public Topic
+    
+    stompClient.subscribe('/topic/'+username, onMessageReceived);
+
+    // Tell your username to the server
+    stompClient.send("/app/chat.addUser/"+username,
         {},
         JSON.stringify({sender: username, type: 'JOIN'})
     )
